@@ -53,20 +53,22 @@
 %\thankstext{T1}{A sample additional note to the title.}
 
 \begin{aug}
-\author[A]{\inits{F.}\fnms{First} \snm{Author}\ead[label=e1]{first@somewhere.com}},
-\author[B]{\inits{S.}\fnms{Second} \snm{Author}\ead[label=e2,mark]{second@somewhere.com}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ORCID can be inserted by command:         %%
+%% \orcid{0000-0000-0000-0000}               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author[A]{\inits{F.}\fnms{First}~\snm{Author}\ead[label=e1]{first@somewhere.com}},
+\author[B]{\inits{S.}\fnms{Second}~\snm{Author}\ead[label=e2]{second@somewhere.com}\orcid{0000-0000-0000-0000}}
 \and
-\author[B]{\inits{T.}\fnms{Third} \snm{Author}\ead[label=e3,mark]{third@somewhere.com}\ead[label=u1,url]{www.foo.com}}
+\author[B]{\inits{T.}\fnms{Third}~\snm{Author}\ead[label=e3]{third@somewhere.com}\ead[label=u1,url]{www.foo.com}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Addresses                                %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \address[A]{Department,
-University or Company Name, City, Country,
-\printead{e1}}
+University or Company Name, City, Country\printead[presep={,\ }]{e1}}
 
 \address[B]{Department,
-University or Company Name, City, Country,
-\printead{e2,e3,u1}}
+University or Company Name, City, Country\printead[presep={,\ }]{e2,e3,u1}}
 \end{aug}
 
 
