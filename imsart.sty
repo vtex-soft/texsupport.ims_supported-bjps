@@ -65,7 +65,7 @@
 % Requires Latex2e, ver.2000.06
 %
 \def\imsfmt@name{imsart}
-\def\imsfmt@version{2022/03/30}
+\def\imsfmt@version{2022/04/06}
 %
 \ProvidesFile{imsart.sty}[\imsfmt@version\space IMS article style]
 %
@@ -297,6 +297,7 @@
     \@amsmath@leqnotrue
     \@stslayouttrue
     \@twocolumntrue
+    \@print@bid@doitrue
     \AtEndPreamble{\if@twocolumn\set@page@layout{528.62625pt}{702.75pt}\fi}%
     }
 %
@@ -310,6 +311,7 @@
     \@bjlayouttrue
     \@autosecdottrue
     \@updated@thanksreftrue
+    \@print@bid@doitrue
     \@load@amsthmtrue
     \@load@amsmathtrue
     \@load@natbibtrue
@@ -327,6 +329,7 @@
     \@amsmath@leqnotrue
     \@aihplayouttrue
     \@updated@thanksreftrue
+    \@print@bid@doitrue
     \AtBeginDocument{%
         \@ifpackagewith{natbib}{authoryear}{%
             \@latex@error{Only numerical citations are allowed!
@@ -345,6 +348,7 @@
     \@keywordsasfootnotetrue
     \@bjpslayouttrue
     \@updated@thanksreftrue
+    \@print@bid@doitrue
     \AtBeginDocument{%
         \@ifpackagewith{natbib}{numbers}{%
             \@latex@error{Only author-year citations are allowed!
@@ -4680,7 +4684,23 @@
     \define@key{bid}{mr}{\edef\bid@mr@arg{#1}}
     \define@key{bid}{doi}{\edef\bid@doi@arg{#1}}
     \def\bid@MR#1{\ \MR{#1}\ignorespaces}
-    \def\bid@doiurl#1{\ \ims@href{\doi@base#1}{#1}\ignorespaces}
+    \def\check@doiurl@prefix#1#2#3#4#5\end{%
+        \edef\@doiurlfull{0}%
+        \def\@doiurlhttp{http}%
+        \def\@doiurlstart{#1#2#3#4}%
+        \ifx\@doiurlstart\@doiurlhttp
+            \edef\@doiurlfull{1}%
+        \fi
+        }
+    \def\bid@doiurl#1{\ 
+        \check@doiurl@prefix#1\end
+        \ifnum\@doiurlfull>\z@
+            \ims@href{#1}{#1}%
+        \else
+            \ims@href{\doi@base#1}{\doi@base#1}%
+        \fi
+        \ignorespaces
+        }
 \else
     \define@key{bid}{mr}{\MR{#1}}
     \define@key{bid}{doi}{}
@@ -4707,7 +4727,11 @@
     }
 %
 % for compatibility with old bibtex style
-\def\bdoi#1{\ignorespaces}
+\if@print@bid@doi
+    \let\bdoi\bid@doiurl
+\else
+    \def\bdoi#1{\ignorespaces}
+\fi
 %
 % common@pub@types
 %
@@ -4720,7 +4744,11 @@
     \let\bmisc\@firstofone
     \let\bnote\@firstofone
     \let\banumber\@firstofone
-    \let\bmrnumber\MR
+    \if@print@bid@doi
+        \let\bmrnumber\bid@MR
+    \else
+        \let\bmrnumber\MR
+    \fi
     \let\bid\bbl@bid
     \set@bibl@cmd{bvolume}%
     \csname common@pub@types@hook\endcsname
